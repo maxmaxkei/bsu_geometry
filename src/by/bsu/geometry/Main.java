@@ -15,7 +15,7 @@ public class Main extends Application {
         NavigationBar bar = new NavigationBar(root);
         root.setLeft(bar.createNavigationBar());
         root.setPadding(new Insets(10,10,10,10));
-        Scene scene = new Scene(root, 500,500);
+        Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setWidth(1200);
         primaryStage.setHeight(1000);
