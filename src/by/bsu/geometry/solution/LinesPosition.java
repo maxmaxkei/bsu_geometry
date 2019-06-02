@@ -1,12 +1,13 @@
 package by.bsu.geometry.solution;
 
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class LinesPosition extends Base {
 
@@ -36,9 +37,6 @@ public class LinesPosition extends Base {
     private final String Y2 = "Введите число Y2: ";
     private final String Y3 = "Введите число Y3: ";
     private final String Y4 = "Введите число Y4: ";
-    private final String BUTTON_TEXT = "Вычислить";
-    private final String compareStatement = "Z1 = A1*X3 + B1*Y3 + C1  ->  Z1 = %s*%s + %s*%s + %s\n" +
-                                            "Z2 = A1*X4 + B1*Y4 + C1  ->  Z2 = %s*%s + %s*%s + %s";
 
     private TextField inputX1 = new TextField();
     private TextField inputX2 = new TextField();
@@ -48,6 +46,8 @@ public class LinesPosition extends Base {
     private TextField inputY2 = new TextField();
     private TextField inputY3 = new TextField();
     private TextField inputY4 = new TextField();
+
+    public LinesPosition() {}
 
     @Override
     public FlowPane getPane() {
@@ -75,28 +75,24 @@ public class LinesPosition extends Base {
     }
 
     private void drawResult() {
-        if (pane.getChildren().size() > 7) {
-            pane.getChildren().remove(8);
-            pane.getChildren().remove(7);
-        }
-        int Z1 = calculate(Integer.valueOf(inputX3.getCharacters().toString()),
-                Integer.valueOf(inputY3.getCharacters().toString()));
-        int Z2 = calculate(Integer.valueOf(inputX4.getCharacters().toString()),
-                Integer.valueOf(inputY4.getCharacters().toString()));
-        boolean isIntersect = Z1 * Z2 <= 0;
+        FlowPane resultPane = new FlowPane();
+        Canvas canvas = getBaseCanvas();
+        Scene resultScene = new Scene(resultPane);
+        Stage resultStage = new Stage();
+        GraphicsContext context = canvas.getGraphicsContext2D();
 
-        Text resultHeading = new Text();
-        resultHeading.setFont(new Font(null, 16));
-        pane.getChildren().add(resultHeading);
+        context.strokeText(calculateString(), 50, 50);
+        context.moveTo(extractInt(inputX1), extractInt(inputY1));
+        context.lineTo(extractInt(inputX2), extractInt(inputY2));
+        context.moveTo(extractInt(inputX3), extractInt(inputY3));
+        context.lineTo(extractInt(inputX4), extractInt(inputY4));
 
-        if (isIntersect) {
-            resultHeading.setText("Результат: Отрезки пересекаются");
-            pane.getChildren().add(drawLines(true));
-        } else {
-            resultHeading.setText("Результат: Отрезки не пересекаются");
-            pane.getChildren().add(drawLines(false));
-        }
-        System.out.println(pane.getChildren().size());
+        context.stroke();
+
+        resultPane.getChildren().add(canvas);
+        resultStage.setTitle(label);
+        resultStage.setScene(resultScene);
+        resultStage.show();
     }
 
     private int calculate(int x , int y) {
@@ -110,30 +106,16 @@ public class LinesPosition extends Base {
                 Integer.valueOf(inputY1.getCharacters().toString()));
     }
 
-    private FlowPane createInputPare(Text text1, TextField field1, Text text2, TextField field2) {
-        FlowPane pane = new FlowPane();
-        pane.getChildren().addAll(text1, field1);
-        pane.getChildren().addAll(text2, field2);
-        return pane;
-    }
-
-    private FlowPane drawLines(boolean isIntesect) {
-        Canvas canvas = new Canvas(270,200);
-        FlowPane pane = new FlowPane();
-        GraphicsContext context = canvas.getGraphicsContext2D();
-        context.setLineWidth(2.0);
-        context.beginPath();
-        context.moveTo(30,200);
-        context.lineTo(270, 50);
-        context.moveTo(60, 170);
-        if (isIntesect) {
-            context.lineTo(250, 80);
+    private String calculateString() {
+        int Z1 = calculate(Integer.valueOf(inputX3.getCharacters().toString()),
+                Integer.valueOf(inputY3.getCharacters().toString()));
+        int Z2 = calculate(Integer.valueOf(inputX4.getCharacters().toString()),
+                Integer.valueOf(inputY4.getCharacters().toString()));
+        boolean isIntersect = Z1 * Z2 <= 0;
+        if (isIntersect) {
+            return  "Результат: Отрезки пересекаются";
         } else {
-            context.lineTo(150, 20);
+            return "Результат: Отрезки не пересекаются";
         }
-        context.closePath();
-        context.stroke();
-        pane.getChildren().add(canvas);
-        return pane;
     }
 }

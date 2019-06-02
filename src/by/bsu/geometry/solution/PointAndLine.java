@@ -1,12 +1,13 @@
 package by.bsu.geometry.solution;
 
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class PointAndLine extends Base {
 
@@ -21,7 +22,6 @@ public class PointAndLine extends Base {
     private final String C = "Введите число C: ";
     private final String X = "Введите координату X: ";
     private final String Y = "Введите координату Y: ";
-    private final String compareStatement = "%s*%S + %s*%s + %s = 0   ->   %s = 0";
 
     private String label;
     private FlowPane pane;
@@ -60,82 +60,45 @@ public class PointAndLine extends Base {
         pane.getChildren().add(button);
     }
 
-    private int calculate() {
-        return Integer.valueOf(inputA.getCharacters().toString())*
-                Integer.valueOf(inputX.getCharacters().toString())+
-                Integer.valueOf(inputB.getCharacters().toString())*
-                Integer.valueOf(inputY.getCharacters().toString())+
-                Integer.valueOf(inputC.getCharacters().toString());
-    }
-
     private void drawResult() {
-        if (pane.getChildren().size() > 8) {
-            pane.getChildren().remove(10);
-            pane.getChildren().remove(9);
-            pane.getChildren().remove(8);
-        }
-        int result = calculate();
-        Text resultHeading = new Text();
-        Text finalCompareStatement = new Text();
-        finalCompareStatement.setFont(new Font(null, 12));
-        resultHeading.setFont(new Font(null, 16));
-        finalCompareStatement.setText(String.format(compareStatement,
-                inputA.getCharacters().toString(),
-                inputX.getCharacters().toString(),
-                inputB.getCharacters().toString(),
-                inputY.getCharacters().toString(),
-                inputC.getCharacters().toString(),
-                result));
-        pane.getChildren().add(finalCompareStatement);
+        FlowPane resultPane = new FlowPane();
+        Canvas canvas = getBaseCanvas();
+        Scene resultScene = new Scene(resultPane);
+        Stage resultStage = new Stage();
+        GraphicsContext context = canvas.getGraphicsContext2D();
+
+        context.strokeText(calculateString(), 50, 50);
+        context.moveTo(0, 500 - calculateIntY("firstY"));
+        context.lineTo(1000, 500 - calculateIntY("secondY"));
+
+        context.fillOval(extractInt(inputX) - 3,extractInt(inputY) - 3, 6, 6);
+
+        context.stroke();
+
+        resultPane.getChildren().add(canvas);
+        resultStage.setTitle(label);
+        resultStage.setScene(resultScene);
+        resultStage.show();
+    }
+
+    private String calculateString() {
+        int result = extractInt(inputA) * extractInt(inputX) + extractInt(inputB) *
+                        extractInt(inputY) + extractInt(inputC);
+
         if (result > 0) {
-            resultHeading.setText("Результат: Точка лежит выше прямой");
-            pane.getChildren().addAll(resultHeading, pointNotOnLine(false));
+            return "Результат: Точка лежит выше прямой";
         } else if (result < 0) {
-            resultHeading.setText("Результат: Точка лежит ниже прямой");
-            pane.getChildren().addAll(resultHeading, pointNotOnLine(true));
+            return "Результат: Точка лежит ниже прямой";
         } else {
-            resultHeading.setText("Результат: Точка лежит на прямой");
-            pane.getChildren().addAll(resultHeading, pointOnTheLine());
+            return "Результат: Точка лежит на прямой";
         }
     }
 
-    private FlowPane createInputPare(Text text, TextField field) {
-        FlowPane pane = new FlowPane();
-        pane.getChildren().addAll(text, field);
-        return pane;
-    }
-
-    private FlowPane pointNotOnLine(boolean isUnderLine) {
-        Canvas canvas = new Canvas(300,300);
-        FlowPane pane = new FlowPane();
-        GraphicsContext context = canvas.getGraphicsContext2D();
-        context.setLineWidth(4.0);
-        context.beginPath();
-        context.moveTo(50,200);
-        context.lineTo(270, 50);
-        if (isUnderLine) {
-            context.fillOval(200,170,7,7);
+    private int calculateIntY(String var) {
+        if (var.equals("firstY")) {
+            return (extractInt(inputA) * (-1) * (-500) - extractInt(inputC)) / extractInt(inputB);
         } else {
-            context.fillOval(100,100,7,7);
+            return (extractInt(inputB) * (-1) * (500) - extractInt(inputC)) / extractInt(inputB);
         }
-        context.closePath();
-        context.stroke();
-        pane.getChildren().add(canvas);
-        return pane;
-    }
-
-    private FlowPane pointOnTheLine() {
-        Canvas canvas = new Canvas(300,301);
-        FlowPane pane = new FlowPane();
-        GraphicsContext context = canvas.getGraphicsContext2D();
-        context.setLineWidth(4.0);
-        context.beginPath();
-        context.moveTo(50,250);
-        context.lineTo(250, 50);
-        context.fillOval(145,145,10,10);
-        context.closePath();
-        context.stroke();
-        pane.getChildren().add(canvas);
-        return pane;
     }
 }
