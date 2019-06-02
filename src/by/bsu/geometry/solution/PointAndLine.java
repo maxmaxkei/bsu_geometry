@@ -2,30 +2,30 @@ package by.bsu.geometry.solution;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class PointAndLine extends Base {
 
     private final String THEORY = "Речь идёт об уравнении прямой на плоскости Ax+Bу+С=0, где A,B,C\n " +
-            "— заданные целые числа, также мы имеем точку с координатами (X,Y), которые и подставляем " +
-            "в уравнение. Получается, что точка лежит:\n" +
+            "— заданные целые числа, также мы имеем точку с координатами (X,Y),\n" +
+            "которые и подставляем в уравнение. Получается, что точка лежит:\n" +
             "А) выше уравнения прямой, если Ax+Bу+С>0\n" +
             "Б) ниже прямой, если Ax+Bу+С<0\n" +
-            "В) на прямой, если Ax+Bу+С=0\n" +
-            "В случае, когда нам не дано изначально уравнение прямой, но даны 2 точки (X1,Y1) и (X2,Y2),\n " +
-            "через которые проходит прямая, то находим уравнение прямой по формуле (Х-Х1)/(Х2-Х1) = (Y-Y1)/(Y2-Y1)";
+            "В) на прямой, если Ax+Bу+С=0";
     private final String A = "Введите число А:";
     private final String B = "Введите число B:";
     private final String C = "Введите число C:";
     private final String X = "Введите координату X:";
     private final String Y = "Введите координату Y:";
     private final String BUTTON_TEXT = "Вычислить";
+    private final String compareStatement = "%s*%S + %s*%s + %s = 0   ->   %s = 0";
 
     private String label;
     private FlowPane pane;
@@ -97,15 +97,25 @@ public class PointAndLine extends Base {
         }
         int result = calculate();
         Text resultHeading = new Text();
+        Text finalCompareStatement = new Text();
+        finalCompareStatement.setFont(new Font(null, 12));
         resultHeading.setFont(new Font(null, 16));
+        finalCompareStatement.setText(String.format(compareStatement,
+                inputA.getCharacters().toString(),
+                inputX.getCharacters().toString(),
+                inputB.getCharacters().toString(),
+                inputY.getCharacters().toString(),
+                inputC.getCharacters().toString(),
+                result));
+        pane.getChildren().add(finalCompareStatement);
         if (result > 0) {
-            resultHeading.setText("Точка лежит выше прямой");
+            resultHeading.setText("Результат: Точка лежит выше прямой");
             pane.getChildren().addAll(resultHeading, pointNotOnLine(false));
         } else if (result < 0) {
-            resultHeading.setText("Точка лежит ниже прямой");
+            resultHeading.setText("Результат: Точка лежит ниже прямой");
             pane.getChildren().addAll(resultHeading, pointNotOnLine(true));
         } else {
-            resultHeading.setText("Точка лежит на прямой");
+            resultHeading.setText("Результат: Точка лежит на прямой");
             pane.getChildren().addAll(resultHeading, pointOnTheLine());
         }
     }
@@ -117,39 +127,36 @@ public class PointAndLine extends Base {
     }
 
     private FlowPane pointNotOnLine(boolean isUnderLine) {
+        Canvas canvas = new Canvas(300,300);
         FlowPane pane = new FlowPane();
-        Line line = new Line();
-        line.setStartX(100.0f);
-        line.setStartY(200.0f);
-        line.setEndX(300.0f);
-        line.setEndY(70.0f);
-        Line point = new Line();
-        point.setStartX(100.0f);
-        point.setStartY(250.0f);
-        point.setEndX(100.0f);
-        point.setEndY(250.0f);
-        point.setStrokeWidth(10);
+        GraphicsContext context = canvas.getGraphicsContext2D();
+        context.setLineWidth(4.0);
+        context.beginPath();
+        context.moveTo(50,200);
+        context.lineTo(270, 50);
         if (isUnderLine) {
-            pane.getChildren().addAll(line, point);
+            context.fillOval(200,170,7,7);
         } else {
-            pane.getChildren().addAll(point, line);
+            context.fillOval(100,100,7,7);
         }
+        context.closePath();
+        context.stroke();
+        pane.getChildren().add(canvas);
         return pane;
     }
 
     private FlowPane pointOnTheLine() {
+        Canvas canvas = new Canvas(300,301);
         FlowPane pane = new FlowPane();
-        Line line = new Line();
-        line.setStartX(100.0f);
-        line.setStartY(200.0f);
-        line.setEndX(300.0f);
-        line.setEndY(70.0f);
-        Line point = new Line();
-        point.setStartX(100.0f);
-        point.setStartY(250.0f);
-        point.setEndX(100.0f);
-        point.setEndY(250.0f);
-        point.setStrokeWidth(10);
+        GraphicsContext context = canvas.getGraphicsContext2D();
+        context.setLineWidth(4.0);
+        context.beginPath();
+        context.moveTo(50,250);
+        context.lineTo(250, 50);
+        context.fillOval(145,145,10,10);
+        context.closePath();
+        context.stroke();
+        pane.getChildren().add(canvas);
         return pane;
     }
 }
