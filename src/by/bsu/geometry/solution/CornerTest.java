@@ -7,7 +7,7 @@ import javafx.scene.layout.FlowPane;
 public class CornerTest extends Base {
 
     @Override
-    public FlowPane getPane(BorderPane parent) {
+    public FlowPane getPane() {
         return null;
     }
 

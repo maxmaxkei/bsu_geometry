@@ -6,7 +6,7 @@ import javafx.scene.layout.FlowPane;
 public class RayTest extends Base {
 
     @Override
-    public FlowPane getPane(BorderPane parent) {
+    public FlowPane getPane() {
         return null;
     }
 

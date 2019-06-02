@@ -17,7 +17,7 @@ public class Main extends Application {
         root.setPadding(new Insets(10,10,10,10));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        primaryStage.setWidth(1200);
+        primaryStage.setWidth(1500);
         primaryStage.setHeight(1000);
         primaryStage.show();
     }

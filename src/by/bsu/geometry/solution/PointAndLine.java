@@ -1,12 +1,9 @@
 package by.bsu.geometry.solution;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -19,17 +16,15 @@ public class PointAndLine extends Base {
             "А) выше уравнения прямой, если Ax+Bу+С>0\n" +
             "Б) ниже прямой, если Ax+Bу+С<0\n" +
             "В) на прямой, если Ax+Bу+С=0";
-    private final String A = "Введите число А:";
-    private final String B = "Введите число B:";
-    private final String C = "Введите число C:";
-    private final String X = "Введите координату X:";
-    private final String Y = "Введите координату Y:";
-    private final String BUTTON_TEXT = "Вычислить";
+    private final String A = "Введите число А: ";
+    private final String B = "Введите число B: ";
+    private final String C = "Введите число C: ";
+    private final String X = "Введите координату X: ";
+    private final String Y = "Введите координату Y: ";
     private final String compareStatement = "%s*%S + %s*%s + %s = 0   ->   %s = 0";
 
     private String label;
     private FlowPane pane;
-    private BorderPane parent;
     private TextField inputA = new TextField();
     private TextField inputB = new TextField();
     private TextField inputC = new TextField();
@@ -40,11 +35,6 @@ public class PointAndLine extends Base {
     }
 
     @Override
-    public FlowPane getPane(BorderPane parent) {
-        this.parent = parent;
-        return getPane();
-    }
-
     public FlowPane getPane() {
         createPane();
         return pane;
@@ -56,19 +46,7 @@ public class PointAndLine extends Base {
     }
 
     private void createPane() {
-        pane = new FlowPane(Orientation.VERTICAL);
-        pane.setHgap(10);
-        pane.setVgap(20);
-        pane.setPadding(new Insets(15, 5, 5, 15));
-
-        Text mainHeading = new Text(label);
-        mainHeading.setFont(new Font(null, 25));
-        pane.getChildren().add(mainHeading);
-
-        Text mainText = new Text(THEORY);
-        mainText.setFont(new Font(null, 16));
-        pane.getChildren().add(mainText);
-
+        pane = createBasePane(label, THEORY);
         pane.getChildren().addAll(
                 createInputPare(new Text(A), inputA),
                 createInputPare(new Text(B), inputB),
@@ -77,7 +55,7 @@ public class PointAndLine extends Base {
                 createInputPare(new Text(Y), inputY)
         );
 
-        Button button = new Button(BUTTON_TEXT);
+        Button button = getButton();
         button.setOnAction(actionEvent -> drawResult());
         pane.getChildren().add(button);
     }
@@ -92,6 +70,7 @@ public class PointAndLine extends Base {
 
     private void drawResult() {
         if (pane.getChildren().size() > 8) {
+            pane.getChildren().remove(10);
             pane.getChildren().remove(9);
             pane.getChildren().remove(8);
         }

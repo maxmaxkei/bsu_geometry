@@ -43,6 +43,6 @@ public class NavigationBar {
     }
 
     private void handleEvent(NavigationItem navigationItem) {
-        parent.setCenter(navigationItem.getSolutionFrame().getPane(parent));
+        parent.setCenter(navigationItem.getSolutionFrame().getPane());
     }
 }
