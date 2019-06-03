@@ -25,9 +25,7 @@ public class NavigationBar {
             new NavigationItem<>(Constants.POINT_AND_POLYGON, new PointAndPolygon()),
             new NavigationItem<>(Constants.RAY_TEST, new RayTest()),
             new NavigationItem<>(Constants.CORNER_TEST, new CornerTest()),
-            new NavigationItem<>(Constants.GRAHEM_METHOD, new GrahemMethod()),
-            new NavigationItem<>(Constants.JARVICE_METHOD, new JarviceMethod()),
-            new NavigationItem<>(Constants.QUICK_HULL, new QuickHull())
+            new NavigationItem<>(Constants.JARVICE_METHOD, new JarviceMethod())
         );
     }
 

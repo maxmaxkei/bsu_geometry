@@ -6,7 +6,5 @@ public class Constants {
     public static final String POINT_AND_POLYGON = "Определение положения точки\nотносительно выпуклого многоугольника";
     public static final String RAY_TEST = "Определение положения точки\nотносительнопростого многоугольника\n“Лучевой тест”";
     public static final String CORNER_TEST = "Определение положения точки\nотносительно простого многоугольника\n“Угловой тест”";
-    public static final String GRAHEM_METHOD = "Метод прохода Грэхэма";
     public static final String JARVICE_METHOD = "Метод обхода Джарвиса";
-    public static final String QUICK_HULL = "Метод Quick Hull";
 }

@@ -88,4 +88,8 @@ public abstract class Base {
         pane.getChildren().addAll(text, field);
         return pane;
     }
+
+    public int straightLineEquation(int x1, int y1, int x2, int y2, int x, int y) {
+        return (y1 - y2) * x + (x2 - x1) * y + (x1 * y2 - x2 * y1);
+    }
 }
