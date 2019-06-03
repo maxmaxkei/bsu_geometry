@@ -78,12 +78,15 @@ public class CornerTest extends Base {
         pane.getChildren().add(button);
     }
 
-    private void drawResult() { // TODO: 3.6.19  доделать отрисовку
+    private void drawResult() {
         FlowPane resultPane = new FlowPane();
         Canvas canvas = getBaseCanvas();
         Scene resultScene = new Scene(resultPane);
         Stage resultStage = new Stage();
         GraphicsContext context = canvas.getGraphicsContext2D();
+
+        x = extractInt(pointX);
+        y = extractInt(pointY);
 
         context.strokeText(calculateString(), 50, 50);
 
@@ -91,6 +94,8 @@ public class CornerTest extends Base {
             context.moveTo(500 + extractInt(pointsX.get(i)), 500 - extractInt(pointsY.get(i)));
             context.lineTo(500 + extractInt(pointsX.get(i + 1)), 500 - extractInt(pointsY.get(i + 1)));
         }
+
+        context.fillOval(500 + x - 3,500 - y - 3, 6, 6);
 
         context.stroke();
 
@@ -114,8 +119,7 @@ public class CornerTest extends Base {
             double answer = Math.acos(OAOB / (mOA * mOB));
 
             if (Double.isNaN(answer) || Math.toDegrees(answer) == 180.0) {
-                System.out.println("Точка лежит на многоугольнике");
-                break;
+                return "Точка лежит на многоугольнике";
             } else {
                 ans = Math.toDegrees(answer) + ans;
                 if (i == topCount - 1) {
