@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -26,9 +27,10 @@ public class JarviceMethod extends Base {
     private int pointCount;
     private List<TextField> pointsX = new ArrayList<>();
     private List<TextField> pointsY = new ArrayList<>();
+    LinkedList<Integer> NewListX = new LinkedList<>();
+    LinkedList<Integer> NewListY = new LinkedList<>();
 
-    public JarviceMethod() {
-    }
+    public JarviceMethod() {}
 
     @Override
     public FlowPane getPane() {
@@ -72,6 +74,33 @@ public class JarviceMethod extends Base {
 
         context.strokeText(calculateString(), 50, 50);
 
+        for (int i = 0; i < NewListX.size(); i++) {
+            if (i == NewListX.size() -1) {
+                context.moveTo(500 + NewListX.get(i), 500 - NewListY.get(i));
+                context.lineTo(500 + NewListX.get(0), 500 - NewListY.get(0));
+                break;
+            }
+            context.moveTo(500 + NewListX.get(i), 500 - NewListY.get(i));
+            context.lineTo(500 + NewListX.get(i + 1), 500 - NewListY.get(i + 1));
+        }
+
+        List<Integer> X = Arrays.asList(pointsX.stream().map(this::extractInt).toArray(Integer[]::new));
+        List<Integer> Y = Arrays.asList(pointsY.stream().map(this::extractInt).toArray(Integer[]::new));
+
+        List<Integer> X2 = new ArrayList<>();
+        List<Integer> Y2 = new ArrayList<>();
+
+        for (int i = 0; i < X.size(); i++) {
+            if (!NewListX.contains(X.get(i))) {
+                X2.add(X.get(i));
+                Y2.add(Y.get(i));
+            }
+        }
+
+        for (int i = 0; i < X2.size(); i++) {
+            context.fillOval(500 + X2.get(i) - 3,500 - Y2.get(i) - 3, 6, 6);
+        }
+
         context.stroke();
 
         resultPane.getChildren().add(canvas);
@@ -83,8 +112,6 @@ public class JarviceMethod extends Base {
     private String calculateString() {
         int minY = pointsY.stream().map(this::extractInt).min(Integer::compareTo).get();
         int minX = pointsX.stream().map(this::extractInt).min(Integer::compareTo).get();
-        LinkedList<Integer> NewListX = new LinkedList<>();
-        LinkedList<Integer> NewListY = new LinkedList<>();
         List<Integer> ListXtmp = new ArrayList<>();
         List<Integer> ListYtmp = new ArrayList<>();
 
@@ -102,18 +129,18 @@ public class JarviceMethod extends Base {
         NewListY.add(extractInt(pointsY.get(0)));
         for (int j = 0; j < pointsX.size() ; j++) {
             for (int i = 0; i < pointsX.size(); i++) {
-                if ( (extractInt(pointsY.get(i)) - NewListY.get(NewListY.size()-2)) *
+                if ((extractInt(pointsY.get(i)) - NewListY.get(NewListY.size()-2)) *
                         (NewListX.get(NewListY.size()-1) - NewListX.get(NewListY.size()-2)) -
                         (extractInt(pointsX.get(i)) - NewListX.get(NewListY.size()-2)) *
                         (NewListY.get(NewListY.size()-1) - NewListY.get(NewListY.size()-2)) <= 0 ) {
                     tmp++;
                 }
-                if (i == (pointsX.size() - 1) & tmp > 2) {
+                if (i == (pointsX.size() - 1) && tmp > 2) {
                     NewListX.removeLast();
                     NewListY.removeLast();
                     tmp = 0;
                 }
-                if (i == (pointsX.size() - 1) & tmp == 2) {
+                if (i == (pointsX.size() - 1) && tmp == 2) {
                     tmp = 0;
                     j = 0;
                     if (NewListX.get(0).equals(NewListX.getLast()) && NewListY.get(0).equals(NewListY.getLast())) {
@@ -131,7 +158,7 @@ public class JarviceMethod extends Base {
             NewListY.add(extractInt(pointsY.get(j)));
         }
 
-        return "Список точек x, являющейся МВО - минимальной выпуклой оболочкой " + NewListX +
-        "Список точек y, являющейся МВО - минимальной выпуклой оболочкой " + NewListY;
+        return "Список точек x, являющейся МВО - минимальной выпуклой оболочкой " + NewListX.toString() + "\n" +
+        "Список точек y, являющейся МВО - минимальной выпуклой оболочкой " + NewListY.toString();
     }
 }
