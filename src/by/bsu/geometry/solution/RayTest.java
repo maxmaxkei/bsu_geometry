@@ -18,8 +18,7 @@ public class RayTest extends Base {
 
     private final String THEORY = "Также известен как метод трассировки лучом.\n" +
             "Если в 2 словах, то любой луч, проведенный из внутренней точки,\nбудет иметь нечетное " +
-            "число пересечений с границами полигона, а из внешней – четное. ";
-
+            "число пересечений с границами полигона, а из внешней – четное.";
     private String label;
     private FlowPane pane;
 
@@ -39,7 +38,6 @@ public class RayTest extends Base {
     int maxY;
     int minX;
     int minY;
-
 
     public RayTest() {}
 
